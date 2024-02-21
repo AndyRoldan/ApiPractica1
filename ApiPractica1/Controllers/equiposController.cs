@@ -21,7 +21,7 @@ namespace ApiPractica1.Controllers
         /// </sumary>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetAll")]
+        [Route("OBTENER TODO")]
         public IActionResult Get()
         {
             List<equipos> listadoEquipo = (from e in _equiposContexto.equipos 
@@ -33,6 +33,132 @@ namespace ApiPractica1.Controllers
             }
             return Ok(listadoEquipo);
         }
+
+        ///<sumary>
+        /// EndPoint que retorna los registros de una tablas filtradas por su ID
+        /// </sumary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("BUSCAR POR ID/{id}")]
+        public IActionResult Get(int id)
+        {
+            equipos? equipo = (from e in _equiposContexto.equipos
+                               where e.id_equipos == id
+                               select e).FirstOrDefault();
+
+            if (equipo == null)
+            {
+                return NotFound();
+            }
+            return Ok(equipo);
+        }
+
+
+        ///<sumary>
+        /// EndPoint que retorna los registros de una tablas filtradas por su descripcion
+        /// </sumary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("BUSCAR POR FILTRO/{filtro}")]
+        public IActionResult FindByDescription(string filtro)
+        {
+            equipos? equipo = (from e in _equiposContexto.equipos
+                               where e.descripcion.Contains(filtro)
+                               select e).FirstOrDefault();
+
+            if (equipo == null)
+            {
+                return NotFound();
+            }
+            return Ok(equipo);
+        }
+
+  
+        /// EndPoint que CREA los registros de una tablas 
+     
+        [HttpPost]
+        [Route("AGREGAR")]
+        public IActionResult GuardarEquipo([FromBody]equipos equipo)
+        {
+            try
+            { 
+                _equiposContexto.equipos.Add(equipo);
+                _equiposContexto.SaveChanges();
+                return Ok();    
+            }
+            catch (Exception ex) 
+            { 
+                return BadRequest(ex.Message);  
+            }
+        }
+
+        /// EndPoint que MODIFICAR los registros de una tablas
+        /// 
+      
+
+        [HttpPut]
+        [Route("ACTUALIZAR/{id}")]
+        public IActionResult ActualizarEquipo(int id, [FromBody] equipos equipoModificar)
+        {
+            ///Para actualizar un regisro, se obriene el registro original de la base de datos
+            ///al cual alteraremos alguna propiedad
+            equipos? equipoActual = (from e in _equiposContexto.equipos
+                                     where e.id_equipos == id
+                                     select e).FirstOrDefault();
+
+            ///Verificamos que estisa el registro segun su ID
+            if (equipoActual == null)
+            { return NotFound(); }
+
+            ///Si se encuentra el registro, se alteran los campos modificables
+            equipoActual.nombre = equipoModificar.nombre;
+            equipoActual.descripcion = equipoModificar.descripcion;
+            equipoActual.marca_id = equipoModificar.marca_id;
+            equipoActual.tipo_equipo_id = equipoModificar.tipo_equipo_id;
+            equipoActual.anio_compra = equipoModificar.anio_compra;
+            equipoActual.costo = equipoModificar.costo;
+
+            ///Se marca el registro como modificado en el contexto
+            ///y se envia la modificacion a la base de datos
+            _equiposContexto.Entry(equipoActual).State = EntityState.Modified;
+            _equiposContexto.SaveChanges();
+            return Ok(equipoModificar);
+
+        }
+
+
+        /// EndPoint que ELIMANR los registros de una tablas
+        /// 
+
+        [HttpDelete]
+        [Route("ELIMINAR/{id}")]
+        public IActionResult EliminarEqipo(int id)
+        {
+            ///Para actualizar un regisro, se obriene el registro original de la base de datos
+            ///al cual Eliminaremos
+            equipos? equipo = (from e in _equiposContexto.equipos
+                                     where e.id_equipos == id
+                                     select e).FirstOrDefault();
+
+            ///Verificamos que exista el registro segun su ID
+            if (equipo == null)
+            { return NotFound(); }
+
+       
+            ///Ejecutamos la accion de elimnar el registro
+     
+            _equiposContexto.equipos.Attach(equipo);
+            _equiposContexto.equipos.Remove(equipo);
+            _equiposContexto.SaveChanges();
+
+            return Ok(equipo);
+
+        }
+
+
+
     }
    
 }
