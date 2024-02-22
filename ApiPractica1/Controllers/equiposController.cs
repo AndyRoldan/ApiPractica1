@@ -40,7 +40,7 @@ namespace ApiPractica1.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("BUSCAR POR ID/{id}")]
+        [Route("BUSCAR POR ID")]
         public IActionResult Get(int id)
         {
             equipos? equipo = (from e in _equiposContexto.equipos
@@ -61,7 +61,7 @@ namespace ApiPractica1.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("BUSCAR POR FILTRO/{filtro}")]
+        [Route("BUSCAR POR DESCRIPCION")]
         public IActionResult FindByDescription(string filtro)
         {
             equipos? equipo = (from e in _equiposContexto.equipos
@@ -99,7 +99,7 @@ namespace ApiPractica1.Controllers
       
 
         [HttpPut]
-        [Route("ACTUALIZAR/{id}")]
+        [Route("ACTUALIZAR")]
         public IActionResult ActualizarEquipo(int id, [FromBody] equipos equipoModificar)
         {
             ///Para actualizar un regisro, se obriene el registro original de la base de datos
@@ -133,7 +133,7 @@ namespace ApiPractica1.Controllers
         /// 
 
         [HttpDelete]
-        [Route("ELIMINAR/{id}")]
+        [Route("ELIMINAR")]
         public IActionResult EliminarEqipo(int id)
         {
             ///Para actualizar un regisro, se obriene el registro original de la base de datos

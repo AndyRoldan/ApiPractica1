@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 namespace ApiPractica1.Models
 {
     public class equiposContext : DbContext
