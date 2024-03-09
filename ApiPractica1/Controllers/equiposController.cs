@@ -115,8 +115,8 @@ namespace ApiPractica1.Controllers
             ///Si se encuentra el registro, se alteran los campos modificables
             equipoActual.nombre = equipoModificar.nombre;
             equipoActual.descripcion = equipoModificar.descripcion;
-            equipoActual.marca_id = equipoModificar.marca_id;
-            equipoActual.tipo_equipo_id = equipoModificar.tipo_equipo_id;
+            equipoActual.id_marcas = equipoModificar.id_marcas;
+            equipoActual.id_tipo_equipo = equipoModificar.id_tipo_equipo;
             equipoActual.anio_compra = equipoModificar.anio_compra;
             equipoActual.costo = equipoModificar.costo;
 
